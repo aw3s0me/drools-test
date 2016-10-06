@@ -1,5 +1,6 @@
 package com.test;
 
+import com.test.facts.Account;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -13,7 +14,8 @@ public class DroolsTest {
             DroolsTest drools = new DroolsTest();
             KieSession kSession = drools.getSession("ksession-rules");
 
-
+            Account acc = new Account(200);
+            acc.withdraw(150);
         }
         catch (Throwable t) {
             t.printStackTrace();
