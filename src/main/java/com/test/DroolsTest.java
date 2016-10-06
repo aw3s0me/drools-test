@@ -12,6 +12,8 @@ public class DroolsTest {
         try {
             DroolsTest drools = new DroolsTest();
             KieSession kSession = drools.getSession("ksession-rules");
+
+
         }
         catch (Throwable t) {
             t.printStackTrace();
