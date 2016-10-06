@@ -16,6 +16,8 @@ public class DroolsTest {
 
             Account acc = new Account(200);
             acc.withdraw(150);
+            kSession.insert(acc);
+            kSession.fireAllRules();
         }
         catch (Throwable t) {
             t.printStackTrace();
