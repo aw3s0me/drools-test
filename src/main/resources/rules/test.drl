@@ -3,6 +3,9 @@ dialect  "java"
 import com.test.facts.Account
 import com.test.utilities.Helper
 
+/**
+This rule prints out if holder is running out of money
+**/
 rule "accountBalanceAtLeast"
     when
         $account : Account( balance < 100 )
