@@ -1,0 +1,10 @@
+package rules;
+dialect  "java"
+import com.test.facts.Account
+
+rule "accountBalanceAtLeast"
+    when
+        $account : Account( balance < 100 )
+    then
+        System.out.println("Warning! running out of money!");
+end
