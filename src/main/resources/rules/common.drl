@@ -1,15 +1,16 @@
 package rules;
 dialect  "java"
 import com.test.facts.Alert
+import com.test.facts.SensorReading
 import com.test.utilities.Helper
 
 /**
 This rule prints out if holder is running out of money
 **/
-rule "accountBalanceAtLeast"
+rule "readingCommon"
     when
-        $account : Alert( balance < 100 )
+        $reading : SensorReading( $values: values )
     then
-        System.out.println("Warning! running out of money!");
+        System.out.println("Reading found with values: " + $values);
         Helper.help(drools, "Test Helper");
 end

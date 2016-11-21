@@ -1,6 +1,7 @@
 package com.test;
 
 import com.test.facts.SensorReading;
+import com.test.utilities.RuleRunner;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -19,20 +20,19 @@ public class DroolsTest {
             KieSession kSession = drools.getSession("ksession-rules");
 
             ArrayList<SensorReading> readings = drools.createTestData();
-
-//            acc.withdraw(150);
-//            kSession.insert(acc);
-//            kSession.fireAllRules();
+            drools.executeByOneRuleFile(readings);
         }
         catch (Throwable t) {
             t.printStackTrace();
         }
     }
 
-    private void executeBySensorType(ArrayList<SensorReading> readings) {
-        for (SensorReading reading: readings) {
+    private void executeBySensorTypeRules(ArrayList<SensorReading> readings) {
+        new RuleRunner().runRules( new String[] { "temperature.drl", "humidity.drl", "accelerometer.drl" }, readings.toArray() );
+    }
 
-        }
+    private void executeByOneRuleFile(ArrayList<SensorReading> readings) {
+        new RuleRunner().runRules( new String[] { "rules/common.drl" }, readings.toArray() );
     }
 
     /**
