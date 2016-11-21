@@ -4,16 +4,29 @@ import com.test.facts.SensorReading;
 import com.test.utilities.RuleRunner;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
 import org.drools.core.event.DefaultAgendaEventListener;
+import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.event.rule.*;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.ClockTypeOption;
+import org.kie.internal.KnowledgeBase;
+import org.kie.internal.KnowledgeBaseFactory;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.definition.KnowledgePackage;
+import org.kie.internal.io.ResourceFactory;
+import org.kie.internal.runtime.StatefulKnowledgeSession;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by korovin on 10/6/2016.
@@ -56,10 +69,7 @@ public class DroolsTest {
      * @param readings
      */
     private void testWindowEvent(ArrayList<SensorReading> readings) {
-        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
-        config.setOption( EventProcessingOption.STREAM );
-        
-        new RuleRunner().runRules( new String[] { "rules/time.drl" }, readings.toArray() );
+        executeWindow(new String[] { "rules/time.drl" }, readings.toArray());
     }
 
     /**
@@ -122,6 +132,44 @@ public class DroolsTest {
         ksession.fireAllRules();
     }
 
+    private void executeWindow(String[] rules, Object[] readings) {
+        KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        for ( int i = 0; i < rules.length; i++ ) {
+            String ruleFile = rules[i];
+            System.out.println( "Loading file: " + ruleFile );
+            kbuilder.add( ResourceFactory.newClassPathResource( ruleFile,
+                    RuleRunner.class ),
+                    ResourceType.DRL );
+        }
+
+        Collection<KnowledgePackage> pkgs = kbuilder.getKnowledgePackages();
+        kbase.addKnowledgePackages( pkgs );
+        //StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.STREAM );
+        // This clock is specially useful for unit testing temporal rules since it can be controlled by the application and so the results become deterministic.
+        KieSessionConfiguration sessConfig = KieServices.Factory.get().newKieSessionConfiguration();
+        sessConfig.setOption( ClockTypeOption.get("pseudo"));
+        // KieSession session = kbase.newKieSession( sessConfig, null );
+
+        StatefulKnowledgeSession session = kbase.newStatefulKnowledgeSession(sessConfig, null);
+        SessionPseudoClock clock = session.getSessionClock();
+        // session.setGlobal("max", 6.0);
+
+        for ( int i = 0; i < readings.length; i++ ) {
+            Object fact = readings[i];
+            System.out.println( "Inserting fact: " + fact );
+
+            session.insert(fact);
+            clock.advanceTime( 1, TimeUnit.SECONDS );
+        }
+
+        session.fireAllRules();
+    }
+
     /**
      * Load up knowledge base
      * @param sessionName
@@ -139,41 +187,41 @@ public class DroolsTest {
      */
     private ArrayList<SensorReading> createTestData() {
         return new ArrayList<SensorReading>() {{
-            add(new SensorReading("0", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("0", (new Date()).getTime(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
                put("temperature", 20.0);
             }}));
-            add(new SensorReading("1", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("1", (new Date()).getTime(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
                 put("temperature", 22.0);
             }}));
-            add(new SensorReading("2", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("2", (new Date()).getTime(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
                 put("temperature", 5.0);
             }}));
-            add(new SensorReading("3", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("3", (new Date()).getTime(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
                 put("temperature", 15.0);
             }}));
-            add(new SensorReading("4", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("4", (new Date()).getTime(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
                 put("humidity", 33.0);
             }}));
-            add(new SensorReading("5", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("5", (new Date()).getTime(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
                 put("humidity", 45.0);
             }}));
-            add(new SensorReading("6", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("6", (new Date()).getTime(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
                 put("humidity", 42.0);
             }}));
-            add(new SensorReading("7", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("7", (new Date()).getTime(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
                 put("humidity", 35.0);
             }}));
-            add(new SensorReading("8", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("8", (new Date()).getTime(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
                 put("x", 0.5);
                 put("y", 0.6);
                 put("z", 0.7);
             }}));
-            add(new SensorReading("9", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("9", (new Date()).getTime(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
                 put("x", 1.2);
                 put("y", 1.5);
                 put("z", 1.7);
             }}));
-            add(new SensorReading("10", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+            add(new SensorReading("10", (new Date()).getTime(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
                 put("x", 0.2);
                 put("y", 1.0);
                 put("z", 2.0);

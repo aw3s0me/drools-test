@@ -1,7 +1,20 @@
 package rules;
-dialect  "java"
+dialect  "mvel"
 
+import com.test.facts.SensorReading
+
+declare SensorReading
+    @role(event)
+    @expires(20m)
+end
+
+// Example from https://docs.jboss.org/drools/release/6.2.0.CR3/drools-docs/html/DroolsComplexEventProcessingChapter.html
+// 8.6.2 chapter
 rule "time"
     when
+        $total : Number(doubleValue > 5.0) from accumulate(
+                            SensorReading( $temp : getOneValue(), getType() == "TemperatureSensorReading" ) over window:length( 2 ),
+                            average( $temp ) )
     then
+        System.out.println("Alert with value: " + $total);
 end

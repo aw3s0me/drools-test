@@ -1,6 +1,5 @@
 package com.test.facts;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +8,13 @@ import java.util.Map;
  */
 public class SensorReading {
     private String id;
-    private Date timestamp;
+    private long timestamp;
     private String sensorId;
     private String type;
     private HashMap<String, Double> values;
+    private Double MAX = 8.0;
 
-    public SensorReading(String id, Date timestamp, String sensorId, String type, HashMap<String, Double> values) {
+    public SensorReading(String id, long timestamp, String sensorId, String type, HashMap<String, Double> values) {
         this.id = id;
         this.timestamp = timestamp;
         this.sensorId = sensorId;
@@ -30,11 +30,11 @@ public class SensorReading {
         this.id = id;
     }
 
-    public Date getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -70,6 +70,10 @@ public class SensorReading {
 
     public void setValues(HashMap<String, Double> values) {
         this.values = values;
+    }
+
+    public Double getMax() {
+        return MAX;
     }
 
     @Override
