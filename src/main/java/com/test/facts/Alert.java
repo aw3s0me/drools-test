@@ -5,6 +5,8 @@ package com.test.facts;
  */
 public abstract class Alert {
     private String message;
+    private int eventId;
+    private long eventDestinationTimestamp;
 
     public Alert(String message) {
         this.message = message;
@@ -16,6 +18,22 @@ public abstract class Alert {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public long getEventDestinationTimestamp() {
+        return eventDestinationTimestamp;
+    }
+
+    public void setEventDestinationTimestamp(long eventDestinationTimestamp) {
+        this.eventDestinationTimestamp = eventDestinationTimestamp;
     }
 
     public abstract void execute();

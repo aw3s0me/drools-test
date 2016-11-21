@@ -2,6 +2,7 @@ package com.test.facts;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by korovin on 11/21/2016.
@@ -55,6 +56,12 @@ public class SensorReading {
 
     public HashMap<String, Double> getValues() {
         return values;
+    }
+
+    public Double getOneValue() {
+        Map.Entry<String,Double> entry = getValues().entrySet().iterator().next();
+        String key = entry.getKey();
+        return entry.getValue();
     }
 
     public void setValues(HashMap<String, Double> values) {

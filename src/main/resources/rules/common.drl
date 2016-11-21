@@ -7,13 +7,13 @@ import com.test.utilities.Helper
 
 declare TemperatureAlert
     @role(event)
-    @timestamp(time)
+    @timestamp (eventDestinationTimestamp)
     @expires(20s)
 end
 
 declare AccelerometerAlert
     @role(event)
-    @timestamp(time)
+    @timestamp (eventDestinationTimestamp)
     @expires(20s)
 end
 
@@ -22,10 +22,9 @@ This rule prints out if holder is running out of money
 **/
 rule "readingCommon"
     when
-        $reading : SensorReading( $values: values )
+        $reading : SensorReading(getType() == "TemperatureSensorReading" && getOneValue() < 21 )
     then
-
-        System.out.println("Reading found with values: " + $values);
+        System.out.println("Reading found with values: " + $reading.getOneValue());
         Helper.help(drools, "Test Helper");
 end
 

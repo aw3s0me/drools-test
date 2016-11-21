@@ -114,19 +114,19 @@ public class DroolsTest {
     private ArrayList<SensorReading> createTestData() {
         return new ArrayList<SensorReading>() {{
             add(new SensorReading("0", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
-               put("temperature", 24.0);
+               put("temperature", 20.0);
             }}));
             add(new SensorReading("1", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
-                put("temperature", 24.0);
+                put("temperature", 22.0);
             }}));
             add(new SensorReading("2", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
-                put("temperature", 24.0);
+                put("temperature", 5.0);
             }}));
             add(new SensorReading("3", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
-                put("temperature", 24.0);
+                put("temperature", 15.0);
             }}));
             add(new SensorReading("4", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
-                put("temperature", 24.0);
+                put("temperature", 25.0);
             }}));
             add(new SensorReading("5", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
                 put("x", 24.0);
