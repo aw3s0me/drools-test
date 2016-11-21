@@ -1,8 +1,21 @@
 package rules;
 dialect  "java"
-import com.test.facts.Alert
+import com.test.facts.TemperatureAlert
+import com.test.facts.AccelerometerAlert
 import com.test.facts.SensorReading
 import com.test.utilities.Helper
+
+declare TemperatureAlert
+    @role(event)
+    @timestamp(time)
+    @expires(20s)
+end
+
+declare AccelerometerAlert
+    @role(event)
+    @timestamp(time)
+    @expires(20s)
+end
 
 /**
 This rule prints out if holder is running out of money
@@ -14,4 +27,18 @@ rule "readingCommon"
 
         System.out.println("Reading found with values: " + $values);
         Helper.help(drools, "Test Helper");
+end
+
+rule "Alert Scan Event Processing of Temperature"
+    when
+        $e1: TemperatureAlert()
+    then
+        System.out.println("Temperature Alert from rule");
+end
+
+rule "Alert Scan Event Processing of Accelerometer"
+    when
+        $e2: AccelerometerAlert()
+    then
+        System.out.println("Accelerometer Alert from rule");
 end
