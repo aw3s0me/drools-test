@@ -22,24 +22,48 @@ public class DroolsTest {
     public static void main(String[] args) {
         try {
             DroolsTest drools = new DroolsTest();
-            KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
-            config.setOption( EventProcessingOption.CLOUD );
             // Switching to Stream mode
             // config.setOption( EventProcessingOption.STREAM );
-            KieSession kSession = drools.getSession("ksession-rules");
-            // drools.initalizeEventListeners(kSession);
-
             ArrayList<SensorReading> readings = drools.createTestData();
-            drools.executeTest(kSession, readings.toArray());
-//            drools.executeByOneRuleFile(readings);
+
+            // Run it to see what are event listeners
+            // drools.testEventListener();
+
+            // Run it to check inference of new facts (inference of alerts and applying rules on them)
+            drools.testNewInferredFacts(readings);
         }
         catch (Throwable t) {
             t.printStackTrace();
         }
     }
 
-    private void initalizeEventListeners(KieSession ksession) {
-        ksession.addEventListener( new DefaultAgendaEventListener() {
+    /**
+     * Test inference of new facts (common.drl)
+     */
+    private void testNewInferredFacts(ArrayList<SensorReading> readings) {
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.CLOUD );
+
+        KieSession kSession = getSession("ksession-rules");
+
+        executeTest(kSession, readings.toArray());
+        new RuleRunner().runRules( new String[] { "rules/common.drl" }, readings.toArray() );
+    }
+
+    private void testWindowEvent(ArrayList<SensorReading> readings) {
+
+    }
+
+    /**
+     * Run it to see what is event listener
+     */
+    private void testEventListener(ArrayList<SensorReading> readings) {
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.CLOUD );
+
+        KieSession kSession = getSession("ksession-rules");
+
+        kSession.addEventListener( new DefaultAgendaEventListener() {
             public void afterMatchFired(AfterMatchFiredEvent event) {
                 super.afterMatchFired( event );
                 System.out.println("AfterMatchFired");
@@ -75,15 +99,9 @@ public class DroolsTest {
             }
         });
 
-        ksession.addEventListener( new DebugRuleRuntimeEventListener() );
-    }
+        kSession.addEventListener( new DebugRuleRuntimeEventListener() );
 
-    private void executeBySensorTypeRules(ArrayList<SensorReading> readings) {
-        new RuleRunner().runRules( new String[] { "temperature.drl", "humidity.drl", "accelerometer.drl" }, readings.toArray() );
-    }
-
-    private void executeByOneRuleFile(ArrayList<SensorReading> readings) {
-        new RuleRunner().runRules( new String[] { "rules/common.drl" }, readings.toArray() );
+        executeTest(kSession, readings.toArray());
     }
 
     private void executeTest(KieSession ksession, Object[] readings) {

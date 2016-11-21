@@ -1,0 +1,7 @@
+package rules;
+dialect  "java"
+
+rule "time"
+    when
+    then
+end

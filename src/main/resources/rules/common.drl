@@ -19,6 +19,12 @@ declare AccelerometerAlert
     @expires(20s)
 end
 
+declare HumidityAlert
+    @role(event)
+    @timestamp (eventDestinationTimestamp)
+    @expires(20s)
+end
+
 /**
 This rule prints out if holder is running out of money
 **/
