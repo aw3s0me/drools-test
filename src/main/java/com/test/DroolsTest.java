@@ -27,7 +27,7 @@ public class DroolsTest {
             // Switching to Stream mode
             // config.setOption( EventProcessingOption.STREAM );
             KieSession kSession = drools.getSession("ksession-rules");
-            drools.initalizeEventListeners(kSession);
+            // drools.initalizeEventListeners(kSession);
 
             ArrayList<SensorReading> readings = drools.createTestData();
             drools.executeTest(kSession, readings.toArray());

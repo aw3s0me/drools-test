@@ -7,6 +7,7 @@ public abstract class Alert {
     private String message;
     private int eventId;
     private long eventDestinationTimestamp;
+    private SensorReading reading;
 
     public Alert(String message) {
         this.message = message;
@@ -34,6 +35,14 @@ public abstract class Alert {
 
     public void setEventDestinationTimestamp(long eventDestinationTimestamp) {
         this.eventDestinationTimestamp = eventDestinationTimestamp;
+    }
+
+    public SensorReading getReading() {
+        return reading;
+    }
+
+    public void setReading(SensorReading reading) {
+        this.reading = reading;
     }
 
     public abstract void execute();

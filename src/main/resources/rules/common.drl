@@ -20,19 +20,22 @@ end
 /**
 This rule prints out if holder is running out of money
 **/
-rule "readingCommon"
+rule "readingTemparature"
     when
         $reading : SensorReading(getType() == "TemperatureSensorReading" && getOneValue() < 21 )
     then
         System.out.println("Reading found with values: " + $reading.getOneValue());
         Helper.help(drools, "Test Helper");
+        TemperatureAlert alert = new TemperatureAlert("Temperature alert: " + $reading.getId(), $reading);
+        insert(alert);
 end
 
 rule "Alert Scan Event Processing of Temperature"
     when
         $e1: TemperatureAlert()
     then
-        System.out.println("Temperature Alert from rule");
+        $e1.execute();
+        retract($e1)
 end
 
 rule "Alert Scan Event Processing of Accelerometer"
