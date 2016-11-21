@@ -30,7 +30,11 @@ public class DroolsTest {
             // drools.testEventListener();
 
             // Run it to check inference of new facts (inference of alerts and applying rules on them)
-            drools.testNewInferredFacts(readings);
+            // drools.testNewInferredFacts(readings);
+
+            // Run it to see window feature event from drools
+            // @see https://docs.jboss.org/drools/release/6.5.0.Final/drools-docs/html_single/#DroolsComplexEventProcessingChapter
+            drools.testWindowEvent(readings);
         }
         catch (Throwable t) {
             t.printStackTrace();
@@ -44,14 +48,18 @@ public class DroolsTest {
         KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
         config.setOption( EventProcessingOption.CLOUD );
 
-        KieSession kSession = getSession("ksession-rules");
-
-        executeTest(kSession, readings.toArray());
         new RuleRunner().runRules( new String[] { "rules/common.drl" }, readings.toArray() );
     }
 
+    /**
+     * Test time window event feature
+     * @param readings
+     */
     private void testWindowEvent(ArrayList<SensorReading> readings) {
-
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.STREAM );
+        
+        new RuleRunner().runRules( new String[] { "rules/time.drl" }, readings.toArray() );
     }
 
     /**
