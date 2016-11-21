@@ -15,6 +15,10 @@ import java.util.Collection;
  * Created by korovin on 11/21/2016.
  */
 public class RuleRunner {
+    public RuleRunner() {
+
+    }
+
     public void runRules(String[] rules,
                          Object[] facts) {
 

@@ -2,7 +2,12 @@ package com.test;
 
 import com.test.facts.SensorReading;
 import com.test.utilities.RuleRunner;
+import org.drools.core.event.DebugRuleRuntimeEventListener;
+import org.drools.core.event.DefaultAgendaEventListener;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
+import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.event.rule.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
@@ -17,14 +22,60 @@ public class DroolsTest {
     public static void main(String[] args) {
         try {
             DroolsTest drools = new DroolsTest();
+            KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+            config.setOption( EventProcessingOption.CLOUD );
+            // Switching to Stream mode
+            // config.setOption( EventProcessingOption.STREAM );
             KieSession kSession = drools.getSession("ksession-rules");
+            drools.initalizeEventListeners(kSession);
 
             ArrayList<SensorReading> readings = drools.createTestData();
-            drools.executeByOneRuleFile(readings);
+            drools.executeTest(kSession, readings.toArray());
+//            drools.executeByOneRuleFile(readings);
         }
         catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private void initalizeEventListeners(KieSession ksession) {
+        ksession.addEventListener( new DefaultAgendaEventListener() {
+            public void afterMatchFired(AfterMatchFiredEvent event) {
+                super.afterMatchFired( event );
+                System.out.println("AfterMatchFired");
+                System.out.println( event );
+            }
+
+            @Override
+            public void afterRuleFlowGroupActivated(RuleFlowGroupActivatedEvent event) {
+                super.afterRuleFlowGroupActivated(event);
+                System.out.println("afterRuleFlowGroupActivated");
+                System.out.println(event);
+            }
+
+            @Override
+            public void matchCreated(MatchCreatedEvent event) {
+                super.matchCreated(event);
+                System.out.println("matchCreated");
+                System.out.println(event);
+            }
+
+            @Override
+            public void agendaGroupPushed(AgendaGroupPushedEvent event) {
+                super.agendaGroupPushed(event);
+                System.out.println("agendaGroupPushed");
+                System.out.println(event);
+            }
+
+            @Override
+            public void matchCancelled(MatchCancelledEvent event) {
+                super.matchCancelled(event);
+                System.out.println("matchCancelled");
+                System.out.println(event);
+            }
+        });
+
+        ksession.addEventListener( new DebugRuleRuntimeEventListener() );
     }
 
     private void executeBySensorTypeRules(ArrayList<SensorReading> readings) {
@@ -33,6 +84,16 @@ public class DroolsTest {
 
     private void executeByOneRuleFile(ArrayList<SensorReading> readings) {
         new RuleRunner().runRules( new String[] { "rules/common.drl" }, readings.toArray() );
+    }
+
+    private void executeTest(KieSession ksession, Object[] readings) {
+        for ( int i = 0; i < readings.length; i++ ) {
+            Object fact = readings[i];
+            System.out.println( "Inserting fact: " + fact );
+            ksession.insert( fact );
+        }
+
+        ksession.fireAllRules();
     }
 
     /**

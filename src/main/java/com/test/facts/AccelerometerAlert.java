@@ -24,4 +24,11 @@ public class AccelerometerAlert extends Alert {
     public void execute() {
         System.out.println("Accelerometer Alert");
     }
+
+    @Override
+    public String toString() {
+        return "AccelerometerAlert{" +
+                "values=" + values +
+                '}';
+    }
 }

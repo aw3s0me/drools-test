@@ -60,4 +60,15 @@ public class SensorReading {
     public void setValues(HashMap<String, Double> values) {
         this.values = values;
     }
+
+    @Override
+    public String toString() {
+        return "SensorReading{" +
+                "id='" + id + '\'' +
+                ", timestamp=" + timestamp +
+                ", sensorId='" + sensorId + '\'' +
+                ", type='" + type + '\'' +
+                ", values=" + values +
+                '}';
+    }
 }

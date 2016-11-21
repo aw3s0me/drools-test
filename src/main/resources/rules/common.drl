@@ -11,6 +11,7 @@ rule "readingCommon"
     when
         $reading : SensorReading( $values: values )
     then
+
         System.out.println("Reading found with values: " + $values);
         Helper.help(drools, "Test Helper");
 end
