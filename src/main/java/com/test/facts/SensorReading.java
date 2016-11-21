@@ -64,6 +64,10 @@ public class SensorReading {
         return entry.getValue();
     }
 
+    public Double[] getValuesAsArray() {
+        return (Double[]) this.values.values().toArray();
+    }
+
     public void setValues(HashMap<String, Double> values) {
         this.values = values;
     }

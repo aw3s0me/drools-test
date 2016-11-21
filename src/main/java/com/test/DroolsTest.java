@@ -125,23 +125,32 @@ public class DroolsTest {
             add(new SensorReading("3", new Date(), "1", "TemperatureSensorReading", new HashMap<String, Double>(){{
                 put("temperature", 15.0);
             }}));
-            add(new SensorReading("4", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
-                put("temperature", 25.0);
+            add(new SensorReading("4", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+                put("humidity", 33.0);
             }}));
-            add(new SensorReading("5", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
-                put("x", 24.0);
-                put("y", 21.0);
-                put("z", 32.0);
+            add(new SensorReading("5", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+                put("humidity", 45.0);
             }}));
-            add(new SensorReading("6", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
-                put("x", 24.0);
-                put("y", 21.0);
-                put("z", 32.0);
+            add(new SensorReading("6", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+                put("humidity", 42.0);
             }}));
-            add(new SensorReading("7", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
-                put("x", 24.0);
-                put("y", 21.0);
-                put("z", 32.0);
+            add(new SensorReading("7", new Date(), "1", "HumiditySensorReading", new HashMap<String, Double>(){{
+                put("humidity", 35.0);
+            }}));
+            add(new SensorReading("8", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+                put("x", 0.5);
+                put("y", 0.6);
+                put("z", 0.7);
+            }}));
+            add(new SensorReading("9", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+                put("x", 1.2);
+                put("y", 1.5);
+                put("z", 1.7);
+            }}));
+            add(new SensorReading("10", new Date(), "1", "AccelerometerSensorReading", new HashMap<String, Double>(){{
+                put("x", 0.2);
+                put("y", 1.0);
+                put("z", 2.0);
             }}));
         }};
     }

@@ -4,6 +4,8 @@ import com.test.facts.TemperatureAlert
 import com.test.facts.AccelerometerAlert
 import com.test.facts.SensorReading
 import com.test.utilities.Helper
+import com.test.facts.HumidityAlert
+import com.test.facts.Alert
 
 declare TemperatureAlert
     @role(event)
@@ -30,6 +32,26 @@ rule "readingTemparature"
         insert(alert);
 end
 
+rule "readingHumidity"
+    when
+        $reading : SensorReading(getType() == "HumiditySensorReading" && getOneValue() < 40 )
+    then
+        System.out.println("Reading found with values: " + $reading.getOneValue());
+        Helper.help(drools, "Test Helper");
+        HumidityAlert alert = new HumidityAlert("Humidity alert: " + $reading.getId(), $reading);
+        insert(alert);
+end
+
+rule "readingAccelerometer"
+    when
+        $reading : SensorReading(getType() == "AccelerometerSensorReading" && $values : getValues() && $values["x"] < 1.0)
+    then
+        System.out.println("Accelerometer ");
+        Helper.help(drools, "Test Helper");
+        AccelerometerAlert alert = new AccelerometerAlert("Accelerometer alert: " + $reading.getId(), $reading);
+        insert(alert);
+end
+
 rule "Alert Scan Event Processing of Temperature"
     when
         $e1: TemperatureAlert()
@@ -38,9 +60,18 @@ rule "Alert Scan Event Processing of Temperature"
         retract($e1)
 end
 
+rule "Alert Scan Event Processing of Humidity"
+    when
+        $e1: HumidityAlert()
+    then
+        $e1.execute();
+        retract($e1)
+end
+
 rule "Alert Scan Event Processing of Accelerometer"
     when
-        $e2: AccelerometerAlert()
+        $e1: AccelerometerAlert()
     then
-        System.out.println("Accelerometer Alert from rule");
+        $e1.execute();
+        retract($e1)
 end
