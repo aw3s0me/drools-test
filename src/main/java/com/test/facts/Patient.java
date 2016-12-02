@@ -29,7 +29,7 @@ public class Patient extends BaseHibernate {
     public Patient() {
         super();
     }
- 
+
     public Patient(String name) {
         this.name = name;
     }
