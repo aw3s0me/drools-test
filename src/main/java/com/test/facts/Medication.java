@@ -1,5 +1,7 @@
 package com.test.facts;
 
+import com.test.facts.base.BaseHibernate;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -7,11 +9,7 @@ import javax.persistence.ManyToOne;
 /**
  * Created by akorovin on 02.12.2016.
  */
-public class Medication {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Medication extends BaseHibernate {
     private String name;
 
     private Double dose;
@@ -20,14 +18,6 @@ public class Medication {
 
     @ManyToOne
     private Patient patient;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

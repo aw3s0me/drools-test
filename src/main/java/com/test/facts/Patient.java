@@ -1,5 +1,7 @@
 package com.test.facts;
 
+import com.test.facts.base.BaseHibernate;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Patient {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Patient extends BaseHibernate {
     private String name;
 
     private Double height;
@@ -34,14 +32,6 @@ public class Patient {
 
     public Patient(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
