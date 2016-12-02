@@ -4,7 +4,15 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        <!-- POSTGRES -->
+        <!--<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>-->
+        <!--<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>-->
+        <!--<property name="hibernate.connection.username">postgres</property>-->
+        <!--<property name="hibernate.connection.password">my-secret-pw</property>-->
+        <!--&lt;!&ndash; jdbc:postgresql://[host][:port][/[database]][?property1=value1[&property2=value2]...] &ndash;&gt;-->
+        <!--<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernatedb</property>-->
 
+        <!-- MYSQL -->
         <property name="connection.url">jdbc:mysql://localhost:3306/mysqldb</property>
         <property name="connection.username">root</property>
         <property name="connection.password">my-secret-pw</property>
