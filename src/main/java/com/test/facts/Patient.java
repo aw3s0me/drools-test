@@ -34,6 +34,13 @@ public class Patient extends BaseHibernate {
         this.name = name;
     }
 
+    public Patient(String name, Double height, Double weight, Integer age) {
+        this.name = name;
+        this.height = height;
+        this.weight = weight;
+        this.age = age;
+    }
+
     public String getName() {
         return name;
     }

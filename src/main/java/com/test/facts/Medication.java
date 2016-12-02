@@ -19,6 +19,17 @@ public class Medication extends BaseHibernate {
     @ManyToOne
     private Patient patient;
 
+    public Medication(String name, Double dose, Double periodicity, Patient patient) {
+        this.name = name;
+        this.dose = dose;
+        this.periodicity = periodicity;
+        this.patient = patient;
+    }
+
+    public Medication(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
