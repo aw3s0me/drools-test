@@ -2,11 +2,15 @@ package com.test.facts;
 
 import com.test.facts.base.BaseHibernate;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Created by akorovin on 02.12.2016.
  */
+@Entity
+@Table
 public class Disease extends BaseHibernate {
     private String name;
 

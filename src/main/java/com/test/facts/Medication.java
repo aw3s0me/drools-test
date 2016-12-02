@@ -2,13 +2,13 @@ package com.test.facts;
 
 import com.test.facts.base.BaseHibernate;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * Created by akorovin on 02.12.2016.
  */
+@Entity
+@Table
 public class Medication extends BaseHibernate {
     private String name;
 
@@ -28,6 +28,10 @@ public class Medication extends BaseHibernate {
 
     public Medication(String name) {
         this.name = name;
+    }
+
+    public Medication() {
+        super();
     }
 
     public String getName() {

@@ -23,13 +23,13 @@ public class Patient extends BaseHibernate {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST)
     private List<Disease> diseases = new ArrayList<Disease>();
 
-    @OneToMany(mappedBy = "medication", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST)
     private List<Medication> medications = new ArrayList<Medication>();
 
     public Patient() {
         super();
     }
-
+ 
     public Patient(String name) {
         this.name = name;
     }
