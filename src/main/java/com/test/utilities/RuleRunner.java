@@ -45,4 +45,22 @@ public class RuleRunner {
 
         ksession.fireAllRules();
     }
+
+    public void runRule(String ruleFile, Object fact) {
+        KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        System.out.println( "Loading file: " + ruleFile );
+        kbuilder.add( ResourceFactory.newClassPathResource( ruleFile,
+                RuleRunner.class ),
+                ResourceType.DRL );
+
+        Collection<KnowledgePackage> pkgs = kbuilder.getKnowledgePackages();
+        kbase.addKnowledgePackages( pkgs );
+        StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+
+        ksession.insert( fact );
+
+        ksession.fireAllRules();
+    }
 }

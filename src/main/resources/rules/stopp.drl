@@ -1,7 +1,15 @@
 package rules;
 dialect  "mvel"
 
-rule "stopp"
+import com.test.facts.Patient
+import com.test.facts.Medication
+import com.test.facts.Disease
+
+rule "Cardiovascular rule number 6 Stopp"
     when
+        $patient: Patient( $medications: medications, $diseases: diseases, age > 65 )
+        Medication( name == "Beta-blocker") from $medications
+        Medication( name == "verapamil" ) from $medications
     then
+        System.out.println("Beta-blocker with verapamil. rule #6, patient: " + $patient);
 end

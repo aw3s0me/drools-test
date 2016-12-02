@@ -1,22 +1,20 @@
 package com.test.facts;
 
-import com.test.facts.base.BaseHibernate;
-
 import javax.persistence.*;
 
 /**
  * Created by akorovin on 02.12.2016.
  */
 @Entity
-@Table
-public class Medication extends BaseHibernate {
+public class Medication implements java.io.Serializable {
+    protected Long id;
+
     private String name;
 
     private Double dose;
 
     private Double periodicity;
 
-    @ManyToOne
     private Patient patient;
 
     public Medication(String name, Double dose, Double periodicity, Patient patient) {
@@ -26,12 +24,29 @@ public class Medication extends BaseHibernate {
         this.patient = patient;
     }
 
+    public Medication(String name, Double dose, Double periodicity) {
+        this.name = name;
+        this.dose = dose;
+        this.periodicity = periodicity;
+    }
+
     public Medication(String name) {
         this.name = name;
     }
 
     public Medication() {
         super();
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    // @Column(name = "medication_id")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,6 +73,8 @@ public class Medication extends BaseHibernate {
         this.periodicity = periodicity;
     }
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "patient_id", insertable=false, updatable=false)
     public Patient getPatient() {
         return patient;
     }

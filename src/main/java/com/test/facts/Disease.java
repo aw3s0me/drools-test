@@ -1,22 +1,18 @@
 package com.test.facts;
 
-import com.test.facts.base.BaseHibernate;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by akorovin on 02.12.2016.
  */
 @Entity
-@Table
-public class Disease extends BaseHibernate {
+public class Disease implements java.io.Serializable {
+    protected Long id;
+
     private String name;
 
     private String type;
 
-    @ManyToOne
     private Patient patient;
 
     public Disease() {
@@ -33,6 +29,22 @@ public class Disease extends BaseHibernate {
         this.patient = patient;
     }
 
+    public Disease(String type, String name) {
+        this.type = type;
+        this.name = name;
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    // @Column(name = "disease_id")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -41,6 +53,8 @@ public class Disease extends BaseHibernate {
         this.name = name;
     }
 
+    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id", insertable=false, updatable=false)
     public Patient getPatient() {
         return patient;
     }

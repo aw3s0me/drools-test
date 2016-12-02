@@ -1,17 +1,17 @@
 package com.test.facts;
 
-import com.test.facts.base.BaseHibernate;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by akorovin on 02.12.2016.
  */
 @Entity
 @Table
-public class Patient extends BaseHibernate {
+public class Patient implements java.io.Serializable {
+    protected Long id;
+
     private String name;
 
     private Double height;
@@ -20,11 +20,9 @@ public class Patient extends BaseHibernate {
 
     private Integer age;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST)
-    private List<Disease> diseases = new ArrayList<Disease>();
+    private Set<Disease> diseases = new HashSet<Disease>();
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST)
-    private List<Medication> medications = new ArrayList<Medication>();
+    private Set<Medication> medications = new HashSet<Medication>();
 
     public Patient() {
         super();
@@ -39,6 +37,17 @@ public class Patient extends BaseHibernate {
         this.height = height;
         this.weight = weight;
         this.age = age;
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    // @Column(name = "patient_id")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,20 +82,40 @@ public class Patient extends BaseHibernate {
         this.age = age;
     }
 
-    public List<Disease> getDiseases() {
+//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Disease.class)
+//    @Fetch(value = FetchMode.SUBSELECT)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
+    // @LazyCollection(LazyCollectionOption.FALSE)
+    // @JoinTable(joinColumns = { @JoinColumn(name = "patient_id") }, inverseJoinColumns = { @JoinColumn(name = "disease_id")})
+    public Set<Disease> getDiseases() {
         return diseases;
     }
 
-    public void setDiseases(List<Disease> diseases) {
+    public void setDiseases(Set<Disease> diseases) {
         this.diseases = diseases;
     }
 
-    public List<Medication> getMedications() {
+    // @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Medication.class)
+    // @Fetch(value = FetchMode.SUBSELECT)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
+    // @LazyCollection(LazyCollectionOption.FALSE)
+    // @JoinTable(joinColumns = { @JoinColumn(name = "patient_id") }, inverseJoinColumns = { @JoinColumn(name = "medication_id")})
+    public Set<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<Medication> medications) {
+    public void setMedications(Set<Medication> medications) {
         this.medications = medications;
+    }
+
+    public void addMedication(Medication medication) {
+        medication.setPatient(this);
+        this.medications.add(medication);
+    }
+
+    public void addDisease(Disease disease) {
+        disease.setPatient(this);
+        this.diseases.add(disease);
     }
 
     @Override
@@ -97,8 +126,6 @@ public class Patient extends BaseHibernate {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", age=" + age +
-                ", diseases=" + diseases +
-                ", medications=" + medications +
                 '}';
     }
 }
