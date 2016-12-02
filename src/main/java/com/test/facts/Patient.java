@@ -91,4 +91,17 @@ public class Patient {
     public void setMedications(List<Medication> medications) {
         this.medications = medications;
     }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", age=" + age +
+                ", diseases=" + diseases +
+                ", medications=" + medications +
+                '}';
+    }
 }
